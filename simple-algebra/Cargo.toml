@@ -1,5 +1,5 @@
 [package]
-name = "plonky2-playground"
+name = "simple-algebra"
 version = "0.1.0"
 edition = "2021"
 
