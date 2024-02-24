@@ -1,5 +1,7 @@
 use anyhow::Result;
+use plonky2::field::extension::Extendable;
 use plonky2::field::types::Field;
+use plonky2::hash::hash_types::RichField;
 use plonky2::iop::witness::{PartialWitness, WitnessWrite};
 use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::CircuitConfig;
@@ -28,6 +30,8 @@ fn main() -> Result<()> {
     builder.register_public_input(initial);
     builder.register_public_input(cur_target);
 
+    print_builder_info(&builder);
+
     let mut pw = PartialWitness::new();
     pw.set_target(initial, F::ONE);
 
@@ -40,4 +44,13 @@ fn main() -> Result<()> {
     );
 
     data.verify(proof)
+}
+
+fn print_builder_info<
+    F: RichField + Extendable<D>,
+    const D: usize,
+>(builder: &CircuitBuilder<F, D>) {
+    println!("Number of gates: {}", builder.num_gates());
+    println!("Number of public inputs: {}", builder.num_public_inputs());
+    println!("Number of lookup tables: {}", builder.num_luts());
 }
